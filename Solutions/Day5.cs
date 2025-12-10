@@ -2,9 +2,13 @@
 
 namespace AoC2025.Solutions
 {
-    public class Day5(bool testInput)
+    public class Day5
     {
-        private Tuple<List<string>, List<string>> _input => InputReader.ReadAsTwoStringLists(5, "\n", testInput);
+        private Tuple<List<string>, List<string>> _input;
+        public Day5(bool testInput)
+        {
+            _input = InputReader.ReadAsTwoStringLists(5, "\n", testInput);
+        }
 
         private List<Tuple<Int64, Int64>> ParseRanges()
         {
