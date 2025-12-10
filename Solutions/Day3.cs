@@ -2,9 +2,13 @@
 
 namespace AoC2025.Solutions
 {
-    public class Day3(bool testInput)
+    public class Day3
     {
-        private List<string> _input => InputReader.ReadAsStringList(3, testInput);
+        private List<string> _input;
+        public Day3(bool testInput)
+        {
+            _input = InputReader.ReadAsStringList(3, testInput);
+        }
 
         public string GetSolution1()
         {

@@ -3,9 +3,13 @@ using System.Text.RegularExpressions;
 
 namespace AoC2025.Solutions
 {
-    public class Day6(bool testInput)
+    public class Day6
     {
-        private List<string> _input => InputReader.ReadAsStringList(6, testInput);
+        private List<string> _input;
+        public Day6(bool testInput)
+        {
+            _input = InputReader.ReadAsStringList(6, testInput);
+        }
 
         public string GetSolution1()
         {

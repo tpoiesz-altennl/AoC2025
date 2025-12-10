@@ -2,9 +2,13 @@
 
 namespace AoC2025.Solutions
 {
-    public class Day2(bool testInput)
+    public class Day2
     {
-        private List<List<Int64>> _input => InputReader.ReadAsNumberTuples(2, ",", "-", testInput);
+        private List<List<Int64>> _input;
+        public Day2(bool testInput)
+        {
+            _input = InputReader.ReadAsNumberTuples(2, ",", "-", testInput);
+        }
 
         public string GetSolution1()
         {
