@@ -35,6 +35,9 @@ namespace AoC2025.Controllers
                 case 7:
                     Day7 day7 = new(testInput);
                     return day7.GetSolution1(writeTestOutput) + "\n" + day7.GetSolution2(writeTestOutput);
+                case 8:
+                    Day8 day8 = new(testInput);
+                    return day8.GetSolution1() + "\n" + day8.GetSolution2();
                 default:
                     return "404";
             }
