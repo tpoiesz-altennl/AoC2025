@@ -78,6 +78,7 @@ namespace AoC2025.Solutions
                     connectionsByDistance.AddSorted(new(box.SquareDist(existing), new(box, existing)), true);
                 inputCopy.Add(box);
             }
+            inputCopy.Clear();
             var circuits = BuildCircuits(connectionsByDistance);
             // Find the biggest three
             Tuple<int, int, int> biggestThree = new(0, 0, 0);
@@ -132,7 +133,67 @@ namespace AoC2025.Solutions
 
         public string GetSolution2()
         {
-            return "404";
+            _input.ForEach(v =>
+            {
+                if (v[0] > int.MaxValue || v[1] > int.MaxValue || v[2] > int.MaxValue)
+                    throw new ArgumentException("Provided input values are too big!");
+            });
+            List<Vec3> inputCopy = [];
+            CustomSortedList connectionsByDistance = new(testInput ? 10 : 1000);
+            foreach (List<Int64> v in _input)
+            {
+                Vec3 box = new((int)v[0], (int)v[1], (int)v[2]);
+                foreach (Vec3 existing in inputCopy)
+                    connectionsByDistance.AddSorted(new(box.SquareDist(existing), new(box, existing)), false);
+                inputCopy.Add(box);
+            }
+            var circuits = BuildWholeNetwork(connectionsByDistance, inputCopy, out Tuple<Vec3, Vec3> lastConnection);
+            return $"Solution 2: {(Int64)lastConnection.Item1.X * (Int64)lastConnection.Item2.X}";
+        }
+
+        private List<HashSet<Vec3>> BuildWholeNetwork(List<Tuple<Int64, Tuple<Vec3, Vec3>>> connections, List<Vec3> separatedNodes, out Tuple<Vec3, Vec3> lastConnection)
+        {
+            List<HashSet<Vec3>> allCircuits = [];
+            foreach (var connection in connections)
+            {
+                List<HashSet<Vec3>> circuitsToExpand = [];
+                for (int i = 0; i < allCircuits.Count; ++i)
+                {
+                    HashSet<Vec3> circuit = allCircuits[i];
+                    if (circuit.Contains(connection.Item2.Item1))
+                    {
+                        circuitsToExpand.Add(circuit);
+                        allCircuits.RemoveAt(i--);
+                    }
+                    else if (circuit.Contains(connection.Item2.Item2))
+                    {
+                        circuitsToExpand.Add(circuit);
+                        allCircuits.RemoveAt(i--);
+                    }
+                }
+                if (circuitsToExpand.Count > 0)
+                {
+                    circuitsToExpand[0].UnionWith([connection.Item2.Item1, connection.Item2.Item2]);
+                    for (int i = 1; i < circuitsToExpand.Count; ++i)
+                    {
+                        circuitsToExpand[0].UnionWith(circuitsToExpand[i]);
+                    }
+                    allCircuits.Add(circuitsToExpand[0]);
+                }
+                else
+                {
+                    allCircuits.Add([connection.Item2.Item1, connection.Item2.Item2]);
+                }
+                separatedNodes.Remove(connection.Item2.Item1);
+                separatedNodes.Remove(connection.Item2.Item2);
+                if (separatedNodes.Count == 0 && allCircuits.Count == 1)
+                {
+                    lastConnection = connection.Item2;
+                    return allCircuits;
+                }
+            }
+            lastConnection = new(new(-1, -1, -1), new(-1, -1, -1));
+            return [];
         }
     }
 }
