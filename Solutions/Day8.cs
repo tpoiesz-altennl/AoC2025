@@ -2,21 +2,14 @@
 
 namespace AoC2025.Solutions
 {
-    public class Day8(bool testInput)
+    public class Day8
     {
-        private List<List<Int64>> _input => InputReader.ReadAsNumberTuples(8, "\n", ",", testInput);
-
-        private class Vec3 : Tuple<int, int, int>
+        private List<List<Int64>> _input;
+        private bool _test;
+        public Day8(bool testInput)
         {
-            public Vec3(int x, int y, int z) : base(x, y, z) { }
-            public int X => Item1;
-            public int Y => Item2;
-            public int Z => Item3;
-
-            public Int64 SquareDist(Vec3 other)
-            {
-                return (Int64)(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2) + Math.Pow(Z - other.Z, 2));
-            }
+            _input = InputReader.ReadAsNumberTuples(8, "", ",", testInput);
+            _test = testInput;
         }
 
         private class CustomSortedList(int capacity) : List<Tuple<Int64, Tuple<Vec3, Vec3>>>(capacity)
@@ -64,16 +57,11 @@ namespace AoC2025.Solutions
 
         public string GetSolution1()
         {
-            _input.ForEach(v =>
-                {
-                    if (v[0] > int.MaxValue || v[1] > int.MaxValue || v[2] > int.MaxValue)
-                        throw new ArgumentException("Provided input values are too big!");
-                });
             List<Vec3> inputCopy = [];
-            CustomSortedList connectionsByDistance = new(testInput ? 10 : 1000);
+            CustomSortedList connectionsByDistance = new(_test ? 10 : 1000);
             foreach (List<Int64> v in _input)
             {
-                Vec3 box = new((int)v[0], (int)v[1], (int)v[2]);
+                Vec3 box = new(v[0], v[1], v[2]);
                 foreach (Vec3 existing in inputCopy)
                     connectionsByDistance.AddSorted(new(box.SquareDist(existing), new(box, existing)), true);
                 inputCopy.Add(box);
@@ -133,16 +121,11 @@ namespace AoC2025.Solutions
 
         public string GetSolution2()
         {
-            _input.ForEach(v =>
-            {
-                if (v[0] > int.MaxValue || v[1] > int.MaxValue || v[2] > int.MaxValue)
-                    throw new ArgumentException("Provided input values are too big!");
-            });
             List<Vec3> inputCopy = [];
-            CustomSortedList connectionsByDistance = new(testInput ? 10 : 1000);
+            CustomSortedList connectionsByDistance = new(_test ? 10 : 1000);
             foreach (List<Int64> v in _input)
             {
-                Vec3 box = new((int)v[0], (int)v[1], (int)v[2]);
+                Vec3 box = new(v[0], v[1], v[2]);
                 foreach (Vec3 existing in inputCopy)
                     connectionsByDistance.AddSorted(new(box.SquareDist(existing), new(box, existing)), false);
                 inputCopy.Add(box);

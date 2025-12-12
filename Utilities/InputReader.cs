@@ -23,7 +23,7 @@
             return new Grid(ReadAsStringList(day, test));
         }
 
-        public static List<List<Int64>> ReadAsNumberTuples(int day, string inputSeparator, string tupleSeparator = "", bool test = false)
+        public static List<List<Int64>> ReadAsNumberTuples(int day, string inputSeparator = "", string tupleSeparator = "", bool test = false)
         {
             string filepath = $"{Environment.CurrentDirectory}\\Inputs\\Day{day}{(test ? "Test" : "")}.txt";
             List<List<Int64>> results = [];
@@ -32,18 +32,26 @@
                 string? line = sr.ReadLine();
                 while (!String.IsNullOrEmpty(line))
                 {
-                    string[] entry = line.Split(inputSeparator);
-                    if (tupleSeparator != "")
+                    if (inputSeparator != "")
                     {
-                        foreach (string sub in entry)
+                        string[] entry = line.Split(inputSeparator);
+                        if (tupleSeparator != "")
                         {
-                            string[] subEntry = sub.Split(tupleSeparator);
-                            results.Add(subEntry.Select(s => Int64.Parse(s)).ToList());
+                            foreach (string sub in entry)
+                            {
+                                string[] subEntry = sub.Split(tupleSeparator);
+                                results.Add(subEntry.Select(s => Int64.Parse(s)).ToList());
+                            }
+                        }
+                        else
+                        {
+                            results.Add([.. entry.Select(s => Int64.Parse(s))]);
                         }
                     }
-                    else
+                    else if (tupleSeparator != "")
                     {
-                        results.Add([int.Parse(entry[0])]);
+                        string[] entry = line.Split(tupleSeparator);
+                        results.Add([.. entry.Select(s => Int64.Parse(s))]);
                     }
                     line = sr.ReadLine();
                 }

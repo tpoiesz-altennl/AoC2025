@@ -16,11 +16,43 @@ namespace AoC2025.Utilities
             SouthEast
         }
 
+        public static Direction GetOppositeDirection(Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.NorthWest:
+                    return Direction.SouthEast;
+                case Direction.North:
+                    return Direction.South;
+                case Direction.NorthEast:
+                    return Direction.SouthWest;
+                case Direction.West:
+                    return Direction.East;
+                case Direction.East:
+                    return Direction.West;
+                case Direction.SouthWest:
+                    return Direction.NorthEast;
+                case Direction.South:
+                    return Direction.North;
+                case Direction.SouthEast:
+                    return Direction.NorthWest;
+                default:
+                    throw new ArgumentException($"Invalid direction: {dir}");
+            }
+        }
+
         public class Coord : Tuple<int, int>
         {
             public Coord(int row, int col) : base(row, col)
             {
             }
+
+            public Coord(Vec2 v) : base((int)v.Y, (int)v.X)
+            {
+            }
+
+            public static implicit operator Coord(Vec2 v) => new Coord(v);
+
             public int Row => (int)this.Item1;
             public int Col => (int)this.Item2;
 
@@ -29,6 +61,12 @@ namespace AoC2025.Utilities
                 if (obj is null)
                     return false;
                 return typeof(Coord) == obj.GetType() && this.Row == ((Coord)obj).Row && this.Col == ((Coord)obj).Col;
+            }
+
+            // Compiler complains if we don't override this
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
             }
 
             public static bool operator ==(Coord? lhs, Coord? rhs)
