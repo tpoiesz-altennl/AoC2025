@@ -111,6 +111,18 @@ namespace AoC2025.Controllers
                     }
                     watch.Stop();
                     return (watch.ElapsedMilliseconds / iterations).ToString();
+                case 10:
+                    Day10 day10 = new(false);
+                    watch = Stopwatch.StartNew();
+                    for (int i = 0; i < iterations; ++i)
+                    {
+                        if (solution == 1)
+                            day10.GetSolution1(); // discard return value
+                        else if (solution == 2)
+                            day10.GetSolution2();
+                    }
+                    watch.Stop();
+                    return (watch.ElapsedMilliseconds / iterations).ToString();
                 default:
                     return "404";
             }
