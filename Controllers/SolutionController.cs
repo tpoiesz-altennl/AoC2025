@@ -38,6 +38,9 @@ namespace AoC2025.Controllers
                 case 8:
                     Day8 day8 = new(testInput);
                     return day8.GetSolution1() + "\n" + day8.GetSolution2();
+                case 11:
+                    Day11 day11 = new(testInput);
+                    return day11.GetSolution1() + "\n" + day11.GetSolution2();
                 default:
                     return "404";
             }
